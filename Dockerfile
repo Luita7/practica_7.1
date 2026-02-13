@@ -1,15 +1,20 @@
-FROM node:14
+FROM node:18
 
-# Create app directory
+# Crear directorio de trabajo
 WORKDIR /usr/src/app
 
-# Install app dependencies
-COPY package.json yarn.lock ./
+# Copiar archivos de dependencias
+COPY package*.json ./
+COPY yarn.lock ./
+
+# Instalar dependencias
 RUN yarn install
 
-# Bundle app source
+# Copiar el resto del código de la aplicación
 COPY . .
 
-EXPOSE 8080
+# Exponer el puerto que configuramos en app.js
+EXPOSE 8085
 
+# Comando para arrancar la aplicación
 CMD [ "node", "app.js" ]
