@@ -1,30 +1,39 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('../app');
-const expect = chai.expect;
+const app = require('../app.js');
+const request = require('supertest')(app);
 
-chai.use(chaiHttp);
-
-describe('Animales API', () => {
-  it('Debería obtener todos los animales en /api', (done) => {
-    chai.request(app)
-      .get('/api')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array');
-        // Cambiamos el valor a 4 porque ahora hay 4 animales (cow, pig, duck, gato)
-        expect(res.body.length).to.equal(4); 
-        done();
-      });
+describe('GET', function(){
+  it('respuesta contiene text/html', function(done){
+    request
+      .get('/')
+      .set('Accept', 'text/html')
+      .expect('Content-Type', /html/)
+      .expect(200, done);
   });
 
-  it('Debería responder con HTML en /', (done) => {
-    chai.request(app)
+  it('respuesta contiene George Orwell', function(done){
+    request
       .get('/')
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res).to.be.html;
-        done();
-      });
+      .set('Accept', 'text/html')
+      .expect(200, /George Orwell had a farm/ig, done);
+  });
+
+  it('/api respuesta contiene json', function(done){
+    request
+      .get('/api')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200, done);
+  });
+
+  it('/api respuesta contiene objeto animales', function(done){
+    request
+      .get('/api')
+      .set('Accept', 'application/json')
+      .expect(200, [
+        { "animal": "cow", "sonido": "moo" },
+        { "animal": "pig", "sonido": "oink" },
+        { "animal": "duck", "sonido": "quack" },
+        { "animal": "gato", "sonido": "miau" }
+      ], done);
   });
 });
