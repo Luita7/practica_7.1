@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feat-nuevoanimal
   pull_request:
     branches:
       - main
@@ -26,4 +27,3 @@ jobs:
 
     - name: Run tests
       run: yarn test
-
