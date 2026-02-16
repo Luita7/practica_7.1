@@ -22,7 +22,7 @@ jobs:
         node-version: '18.x'
 
     - name: Run Yarn
-      run: yarn install
+      run: yarn
 
     - name: Run tests
       run: yarn test
