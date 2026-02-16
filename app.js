@@ -1,22 +1,20 @@
 const express = require('express');
-const _ = require('underscore');
+const app = express();
+const port = 8085;
 
-var port = process.env.PORT || 8085;
-var animals = {
-    "cat": "meow",
-    "dog": "bark",
-    "eel": "hiss",
-    "bear": "growl",
-    "frog": "croak",
-    "lion": "roar",
-    "bird": "tweet"
-}
+// Lista de animales (Aquí es donde añadimos el nuevo animal)
+const animals = [
+  { "animal": "cow", "sonido": "moo" },
+  { "animal": "pig", "sonido": "oink" },
+  { "animal": "duck", "sonido": "quack" },
+  { "animal": "gato", "sonido": "miau" }
+];
 
 function getAnimal() {
-  return animal = _.sample(Object.entries(animals));
+  const randomIndex = Math.floor(Math.random() * animals.length);
+  const animal = animals[randomIndex];
+  return [animal.animal, animal.sonido];
 }
-
-const app = express();
 
 app.get('/', function(req, res){
   const [animal_name, sound] = getAnimal();
@@ -38,6 +36,6 @@ app.get('/api', function(req, res){
   res.end();
 })
 
-module.exports =  app.listen(port, () => {
+module.exports = app.listen(port, () => {
   console.log(`Launching server on http://localhost:${ port }`)
 });
